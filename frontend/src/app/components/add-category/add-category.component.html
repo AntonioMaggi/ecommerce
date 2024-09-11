@@ -1,0 +1,10 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <label for="name">Category Name:</label>
+    <input id="name" formControlName="name" type="text" required>
+  
+    <label for="description">Category Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+  
+    <button type="submit" [disabled]="categoryForm.invalid">Add Category</button>
+  </form>
+  
