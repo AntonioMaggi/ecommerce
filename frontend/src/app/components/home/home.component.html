@@ -1,7 +1,10 @@
-<div *ngFor="let product of products">
-    <h2>{{ product.name }}</h2>
-    <p>{{ product.description }}</p>
-    <p>Price: {{ product.price | currency }}</p>
-    <img [src]="product.image_url" *ngIf="product.image_url" />
+<div class="product-grid">
+  <div class="product-card" *ngFor="let product of products">
+    <img [src]="product.image_url" alt="{{ product.name }}" class="product-image">
+    <div class="product-details">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <p class="price">${{ product.price }}</p>
+    </div>
   </div>
-  
+</div>
