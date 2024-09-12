@@ -13,3 +13,4 @@ Route::post('/products', [ProductController::class, 'store']);
 Route::get('/products', [ProductController::class, 'index']);
 
 Route::post('/categories', [CategoryController::class, 'store']);
+Route::get('/categories', [CategoryController::class, 'index']);
