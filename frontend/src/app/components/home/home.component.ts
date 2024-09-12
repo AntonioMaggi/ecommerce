@@ -35,17 +35,22 @@ export class HomeComponent implements OnInit {
   }
 
     // Delete a product by ID
-    deleteProduct(productId: number): void {
-      if (confirm('Are you sure you want to delete this product?')) {
-        this.productService.deleteProduct(productId).subscribe({
-          next: () => {
-            console.log(`Product with ID ${productId} deleted successfully`);
-            this.products = this.products.filter(product => product.id !== productId);
-          },
-          error: (error) => {
-            console.error('Error deleting product:', error);
-          },
-        });
-      }
+  deleteProduct(productId: number | undefined): void {
+    if (productId === undefined) {
+      console.error('Product ID is undefined');
+      return;
     }
+  
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.productService.deleteProduct(productId).subscribe({
+        next: () => {
+          console.log(`Product with ID ${productId} deleted successfully`);
+          this.products = this.products.filter(product => product.id !== productId);
+        },
+        error: (error) => {
+          console.error('Error deleting product:', error);
+        },
+      });
+    }
+  } 
 }
