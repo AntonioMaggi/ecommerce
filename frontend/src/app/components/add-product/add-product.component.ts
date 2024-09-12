@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router'; 
 import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,7 +23,8 @@ export class AddProductComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -42,10 +44,12 @@ export class AddProductComponent implements OnInit {
       this.productService.addProduct(this.productForm.value).subscribe({
         next: (response) => {
           console.log('Product added successfully:', response);
+          // Redirect to home page after success
+          this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Error adding product:', error);
-        },
+        }
       });
     }
   }
