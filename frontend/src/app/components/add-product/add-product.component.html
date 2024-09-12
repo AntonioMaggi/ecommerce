@@ -8,8 +8,8 @@
   <label for="price">Price:</label>
   <input id="price" formControlName="price" type="number" required>
 
-  <label for="image_url">Image URL:</label>
-  <input id="image_url" formControlName="image_url" type="text">
+  <label for="image">Image:</label>
+  <input type="file" (change)="onFileSelected($event)" required />
 
   <label for="category">Category:</label>
   <select formControlName="category_id" required>

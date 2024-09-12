@@ -4,22 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validate the request data
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image_url' => 'nullable|string',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Image validation
         ]);
-
-        $product = Product::create($validated);
-        return response()->json($product, 201);
+    
+        // Handle file upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_images', 'public');
+            $validatedData['image_url'] = $imagePath;
+        }
+    
+        // Create product using validated data
+        $product = Product::create($validatedData);
+    
+        return response()->json([
+            'message' => 'Product added successfully!',
+            'product' => $product,
+        ], 201);
     }
+    
 
     public function index()
     {

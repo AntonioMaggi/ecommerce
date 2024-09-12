@@ -19,6 +19,7 @@ import { NgFor } from '@angular/common';  // Import NgFor
 export class AddProductComponent implements OnInit {
   productForm: FormGroup;
   categories: Category[] = [];
+  selectedImage: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -30,28 +31,13 @@ export class AddProductComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       price: ['', [Validators.required]],
-      image_url: [''],
+      image: [null],
       category_id: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
     this.loadCategories();
-  }
-
-  onSubmit(): void {
-    if (this.productForm.valid) {
-      this.productService.addProduct(this.productForm.value).subscribe({
-        next: (response) => {
-          console.log('Product added successfully:', response);
-          // Redirect to home page after success
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          console.error('Error adding product:', error);
-        }
-      });
-    }
   }
 
   loadCategories(): void {
@@ -64,4 +50,40 @@ export class AddProductComponent implements OnInit {
       },
     });
   }
+
+  // Handle file input
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.length) {
+      const file = input.files[0];
+      this.productForm.patchValue({ image: file });
+      this.productForm.get('image')?.updateValueAndValidity();
+    }
+  }  
+
+  onSubmit(): void {
+    if (this.productForm.valid) {
+      const formData = new FormData();
+      formData.append('name', this.productForm.get('name')?.value);
+      formData.append('description', this.productForm.get('description')?.value);
+      formData.append('price', this.productForm.get('price')?.value);
+      formData.append('category_id', this.productForm.get('category_id')?.value);
+  
+      // Check and append the image file
+      const image = this.productForm.get('image')?.value;
+      if (image) {
+        formData.append('image', image); // Make sure the 'image' is coming from file input
+      }
+  
+      this.productService.addProduct(formData).subscribe({
+        next: (response) => {
+          console.log('Product added successfully:', response);
+        },
+        error: (error) => {
+          console.error('Error adding product:', error);
+        }
+      });
+    }
+  }
+  
 }
