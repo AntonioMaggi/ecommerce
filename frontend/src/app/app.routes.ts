@@ -6,5 +6,6 @@ import { AddCategoryComponent } from './components/add-category/add-category.com
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'add-product', component: AddProductComponent },
+    { path: 'edit-product/:id', component: AddProductComponent },
     { path: 'add-category', component: AddCategoryComponent }
 ];

@@ -15,8 +15,17 @@ export class ProductService {
     return this.http.post<Product>(this.apiUrl, productData);
   }
 
-  getProducts(): Observable<Product[]> {
+  getProducts(id?: number): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  // Get a single product by ID
+  getProduct(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  }
+
+  updateProduct(id: number, productData: FormData) {
+    return this.http.put(`${this.apiUrl}/products/${id}`, productData);
   }
 
     // Method to delete a product
