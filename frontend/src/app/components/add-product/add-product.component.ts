@@ -6,12 +6,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models/category.model';
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-product',
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule, NgFor],
+  imports: [ReactiveFormsModule, HttpClientModule, CommonModule],
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css'],
   providers: [ProductService, CategoryService],
@@ -101,7 +101,9 @@ export class AddProductComponent implements OnInit {
     // Append image if it's present
     const image = this.productForm.get('image')?.value;
     if (image) {
-      formData.append('image', image);
+      formData.append('image', image); // Append new image if selected
+    } else if (this.isEditMode) {
+      formData.append('image_url', this.productForm.get('image_url')?.value); // Keep the old image if no new image is selected
     }
   
     // Check if the form is in "edit" mode or "add" mode

@@ -8,7 +8,10 @@
   <label for="price">Price:</label>
   <input id="price" formControlName="price" type="number" required>
 
-  <label for="image">Image:</label>
+  <label for="image">Current Image:</label>
+  <img *ngIf="productForm.get('image_url')?.value" [src]="'http://localhost:8000/storage/' + productForm.get('image_url')?.value" alt="Product Image" style="max-width: 200px; display: block; margin-bottom: 10px;" />
+
+  <label for="image">Upload New Image:</label>
   <input type="file" (change)="onFileSelected($event)" required />
 
   <label for="category">Category:</label>
