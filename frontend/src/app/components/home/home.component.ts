@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   products: Product[] = [];
+  sortedProducts: Product[] = [];
 
   constructor(private productService: ProductService) {}
 
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (response) => {
         this.products = response;
+        this.sortedProducts = [...this.products];
       },
       error: (error) => {
         console.error('Error fetching products:', error);
@@ -34,6 +36,34 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  onSortChange(event: Event): void {
+    const sortValue = (event.target as HTMLSelectElement).value;
+
+    switch (sortValue) {
+      case 'price-asc':
+        this.sortedProducts = [...this.products].sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        this.sortedProducts = [...this.products].sort((a, b) => b.price - a.price);
+        break;
+      case 'newest':
+        this.sortedProducts = [...this.products].sort((a, b) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      case 'oldest':
+        this.sortedProducts = [...this.products].sort((a, b) => 
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        break;
+      case 'category':
+        this.sortedProducts = [...this.products].sort((a, b) => 
+          a.category_name.localeCompare(b.category_name));
+        break;
+      default:
+        this.sortedProducts = [...this.products]; // No sorting
+        break;
+    }
+  }
+  
     // Delete a product by ID
   deleteProduct(productId: number | undefined): void {
     if (productId === undefined) {
